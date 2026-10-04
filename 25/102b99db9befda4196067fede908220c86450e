@@ -1,0 +1,20 @@
+.github/dependabot.yml
+  h_f91a6a8a277de2 1-6
+.github/workflows/ci.yml
+  h_f91a6a8a277de2 1-31
+.github/workflows/release.yml
+  h_f91a6a8a277de2 1-29
+.github/workflows/reusable-release.yml
+  h_f91a6a8a277de2 56-57,73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "25102b99db9befda4196067fede908220c86450e",
+  "prompts": {},
+  "humans": {
+    "h_f91a6a8a277de2": {
+      "author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
