@@ -1,0 +1,24 @@
+README.md
+  h_f91a6a8a277de2 2-285
+sync/files/.gitattributes
+  h_f91a6a8a277de2 1-10
+sync/files/.github/dependabot.yml
+  h_f91a6a8a277de2 1-9
+sync/files/.markdownlint.json
+  h_f91a6a8a277de2 1-8
+sync/files/docs/install.md.tmpl
+  h_f91a6a8a277de2 1-106
+sync/sync.sh
+  h_f91a6a8a277de2 1-294
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "142af322fc30b6f173fdd3ec188b88f8b4ee169b",
+  "prompts": {},
+  "humans": {
+    "h_f91a6a8a277de2": {
+      "author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
