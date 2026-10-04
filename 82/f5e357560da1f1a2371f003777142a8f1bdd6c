@@ -1,0 +1,28 @@
+.github/workflows/reusable-claude-review.yml
+  s_7202d694b6c087::t_87251a52ccb283 32-33
+README.md
+  s_7202d694b6c087::t_01f722555d7763 285
+.github/workflows/reusable-claude.yml
+  s_7202d694b6c087::t_6a102f33c5cdb8 38-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "82f5e357560da1f1a2371f003777142a8f1bdd6c",
+  "prompts": {},
+  "humans": {
+    "h_f91a6a8a277de2": {
+      "author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  },
+  "sessions": {
+    "s_7202d694b6c087": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "404df04d-4007-43e7-a485-b53e764781e1",
+        "model": "unknown"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
