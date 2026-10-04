@@ -1,0 +1,25 @@
+.github/workflows/reusable-release.yml
+  s_69183caf6d4944::t_a6db713a9732a2 121,126
+  s_69183caf6d4944::t_e6a4972684af36 120,122-125
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5b48261ed28fb6aee19c4e7d29bca6248d3af0e3",
+  "prompts": {},
+  "humans": {
+    "h_f91a6a8a277de2": {
+      "author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  },
+  "sessions": {
+    "s_69183caf6d4944": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dd0d0559-4eed-4bdf-9720-64005adb3977",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
