@@ -1,0 +1,22 @@
+.github/workflows/reusable-claude-review.yml
+  h_f91a6a8a277de2 1-70
+.github/workflows/reusable-claude.yml
+  h_f91a6a8a277de2 1-57
+.github/workflows/reusable-markdown-lint.yml
+  h_f91a6a8a277de2 1-28
+.github/workflows/reusable-release.yml
+  h_f91a6a8a277de2 1-137
+templates/release-notes.md.tmpl
+  h_f91a6a8a277de2 1-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d545fd7f9acb66ca16a096e18ea5896ec688c555",
+  "prompts": {},
+  "humans": {
+    "h_f91a6a8a277de2": {
+      "author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
