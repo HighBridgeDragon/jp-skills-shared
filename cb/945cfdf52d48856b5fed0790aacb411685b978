@@ -1,0 +1,28 @@
+.gitattributes
+  h_f91a6a8a277de2 1-5
+tests/fixtures/bad-name/SKILL.md
+  h_f91a6a8a277de2 1-10
+tests/fixtures/bad-version/SKILL.md
+  h_f91a6a8a277de2 1-10
+tests/fixtures/crlf-script/SKILL.md
+  h_f91a6a8a277de2 1-10
+tests/fixtures/crlf-script/scripts/fail.sh
+  h_f91a6a8a277de2 1-2
+tests/fixtures/valid/SKILL.md
+  h_f91a6a8a277de2 1-10
+tests/fixtures/valid/scripts/dummy.sh
+  h_f91a6a8a277de2 1-4
+tests/run.sh
+  h_f91a6a8a277de2 1-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "cb945cfdf52d48856b5fed0790aacb411685b978",
+  "prompts": {},
+  "humans": {
+    "h_f91a6a8a277de2": {
+      "author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
