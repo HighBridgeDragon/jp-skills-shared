@@ -1,0 +1,10 @@
+# シェルスクリプトは LF を強制する。
+# Windows の core.autocrlf=true 環境でチェックアウトすると CRLF に変換され、
+# Linux 上（claude.ai の Skill サンドボックス等）で実行したときに
+# `$'\r': command not found` となって動作しないため。
+*.sh text eol=lf
+
+# GitHub の Code > Download ZIP や Source code (zip) から SKILL.md を除外し、
+# claude.ai への誤アップロード時に早期検知させる。
+# Releases 添付の zip は release.yml 内で zip コマンドにより生成するため影響しない。
+SKILL.md export-ignore
