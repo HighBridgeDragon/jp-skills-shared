@@ -282,6 +282,6 @@ bash sync/sync.sh
 1. **最小権限原則 (Least Privilege)**:
    すべての Reusable Workflow の最上位で `permissions: {}` を宣言し、各ジョブで必要な権限のみをピンポイントで明示付与しています。
 2. **サプライチェーン・認証情報の保護**:
-   `actions/checkout` では `persist-credentials: false` を徹底し、不要なトークン流出を防止しています。また、Claude Code 実行前には Takumi Guard を必ず実行します。
+   `actions/checkout` では `persist-credentials: false` を徹底し、不要なトークン流出を防止しています。例外は Claude 系 2 本の呼び出し元リポジトリの checkout で、private リポジトリに限り資格情報を残します。claude-code-action が認証設定より前に `git fetch` するため、残さないと private では必ず失敗します（[anthropics/claude-code-action#1711](https://github.com/anthropics/claude-code-action/issues/1711)）。action は実行中に自身のトークンを `.git/config` へ書き込む（[#1818](https://github.com/anthropics/claude-code-action/issues/1818)）ため、残すことで増える露出は小さいと判断しています。public は匿名で fetch できるため従来どおり残しません。また、Claude Code 実行前には Takumi Guard を必ず実行します。
 3. **インジェクション・ディレクトリトラバーサル防御**:
    `reusable-release.yml` では、受け取った `skill-dir` 引数を正規表現（`^[a-z0-9][a-z0-9-]*(/[a-z0-9][a-z0-9-]*)*$`）で厳格に検証し、コマンドインジェクションや親ディレクトリ（`..`）へのトラバーサルを遮断します。

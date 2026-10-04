@@ -35,7 +35,8 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
-          persist-credentials: false
+          # private は認証なしで fetch できず action の準備段階が失敗するため資格情報を残す（anthropics/claude-code-action#1711）
+          persist-credentials: ${{ github.event.repository.private }}
 
       - name: Checkout upstream shared repository
         uses: actions/checkout@v7
