@@ -180,35 +180,22 @@ for repo in "${TARGET_REPOS[@]}"; do
   existed_gitattributes=false
   existed_markdownlint=false
   existed_dependabot=false
-  existed_install=false
   [ -f "$work_dir/.gitattributes" ] && existed_gitattributes=true
   [ -f "$work_dir/.markdownlint.json" ] && existed_markdownlint=true
   [ -f "$work_dir/.github/dependabot.yml" ] && existed_dependabot=true
-  [ -f "$work_dir/docs/install.md" ] && existed_install=true
 
-  # 設定原本のコピーと展開
+  # 設定原本のコピー
   mkdir -p "$work_dir/.github"
-  mkdir -p "$work_dir/docs"
 
   cp "$SYNC_FILES_DIR/.gitattributes" "$work_dir/.gitattributes"
   cp "$SYNC_FILES_DIR/.markdownlint.json" "$work_dir/.markdownlint.json"
   cp "$SYNC_FILES_DIR/.github/dependabot.yml" "$work_dir/.github/dependabot.yml"
 
-  # docs/install.md.tmpl の変数展開
-  tmpl_file="$SYNC_FILES_DIR/docs/install.md.tmpl"
-  dest_file="$work_dir/docs/install.md"
-
-  if command -v envsubst >/dev/null 2>&1; then
-    SKILL="$skill" REPO="$repo_full" envsubst '${SKILL} ${REPO}' < "$tmpl_file" > "$dest_file"
-  else
-    sed -e "s|\${SKILL}|${skill}|g" -e "s|\${REPO}|${repo_full}|g" "$tmpl_file" > "$dest_file"
-  fi
-
   # 差分確認
   pushd "$work_dir" > /dev/null
 
   # 変更状態の取得（同期対象ファイルに限定）
-  changed_files=$(git status --porcelain .gitattributes .markdownlint.json .github/dependabot.yml docs/install.md 2>/dev/null || true)
+  changed_files=$(git status --porcelain .gitattributes .markdownlint.json .github/dependabot.yml 2>/dev/null || true)
 
   if [ -z "$changed_files" ]; then
     echo "  [同期済み] 差分はありません。"
@@ -224,7 +211,7 @@ for repo in "${TARGET_REPOS[@]}"; do
   if [ "$DRY_RUN" = true ]; then
     echo ""
     echo "  --- [DRY-RUN 差分出力: ${repo_name}] ---"
-    for f in .gitattributes .markdownlint.json .github/dependabot.yml docs/install.md; do
+    for f in .gitattributes .markdownlint.json .github/dependabot.yml; do
       if [ -f "$f" ]; then
         if git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
           git diff "$f" || true
@@ -241,7 +228,6 @@ for repo in "${TARGET_REPOS[@]}"; do
       [ "$existed_gitattributes" = true ] && git checkout -- .gitattributes 2>/dev/null || rm -f .gitattributes
       [ "$existed_markdownlint" = true ] && git checkout -- .markdownlint.json 2>/dev/null || rm -f .markdownlint.json
       [ "$existed_dependabot" = true ] && git checkout -- .github/dependabot.yml 2>/dev/null || rm -f .github/dependabot.yml
-      [ "$existed_install" = true ] && git checkout -- docs/install.md 2>/dev/null || rm -f docs/install.md
     fi
   else
     # 実際のコミットと PR 作成
@@ -249,8 +235,8 @@ for repo in "${TARGET_REPOS[@]}"; do
     echo "  同期ブランチ作成: $BRANCH (from $current_branch)"
     git checkout -B "$BRANCH"
 
-    git add .gitattributes .markdownlint.json .github/dependabot.yml docs/install.md
-    commit_msg="chore: 同期設定および共通ドキュメントの更新"
+    git add .gitattributes .markdownlint.json .github/dependabot.yml
+    commit_msg="chore: 共通設定原本の同期更新"
     git commit -m "$commit_msg"
 
     echo "  リモートへプッシュ中: origin $BRANCH"
@@ -266,13 +252,12 @@ for repo in "${TARGET_REPOS[@]}"; do
         --repo "$repo_full" \
         --base main \
         --head "$BRANCH" \
-        --title "chore: 同期設定および共通ドキュメントの更新" \
-        --body "jp-skills-shared からの自動同期による設定・ドキュメント更新です。
+        --title "chore: 共通設定原本の同期更新" \
+        --body "jp-skills-shared からの自動同期による共通設定原本の更新です。
 
 - \`.gitattributes\` (LF 改行コード保護、zip 除外設定)
 - \`.markdownlint.json\` (共通 Markdown リント設定)
-- \`.github/dependabot.yml\` (GitHub Actions 週次定期更新)
-- \`docs/install.md\` (共通クライアント導入ガイド原本からの展開)" 2>/dev/null || true)
+- \`.github/dependabot.yml\` (GitHub Actions 週次定期更新)" 2>/dev/null || true)
       echo "  [PR作成完了] ${pr_url}"
     fi
 
