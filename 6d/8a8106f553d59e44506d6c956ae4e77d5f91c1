@@ -1,0 +1,18 @@
+README.md
+  h_f91a6a8a277de2 18,38-39,47,244-245
+docs/install-guide.md
+  h_f91a6a8a277de2 1,3-5,12,15,19,22-24,26-29,35-36,43-44,53,61,85
+sync/sync.sh
+  h_f91a6a8a277de2 187,198,214,238-239,255-256,260
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "6d8a8106f553d59e44506d6c956ae4e77d5f91c1",
+  "prompts": {},
+  "humans": {
+    "h_f91a6a8a277de2": {
+      "author": "Ryo Takahashi <38057616+HighBridgeDragon@users.noreply.github.com>"
+    }
+  }
+}
