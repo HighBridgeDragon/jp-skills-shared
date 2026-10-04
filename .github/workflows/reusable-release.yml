@@ -1,0 +1,137 @@
+name: Reusable Release
+
+on:
+  workflow_call:
+    inputs:
+      skill-dir:
+        description: 'Target skill directory name (e.g. jp-diet-minutes)'
+        required: true
+        type: string
+      shared-ref:
+        description: 'Git ref of jp-skills-shared repository'
+        required: false
+        default: 'v1'
+        type: string
+    outputs:
+      version:
+        description: 'Extracted semver version'
+        value: ${{ jobs.validate.outputs.version }}
+      tag:
+        description: 'Release tag (v<version>)'
+        value: ${{ jobs.validate.outputs.tag }}
+      released:
+        description: 'Whether a new release was published (true/false)'
+        value: ${{ jobs.release.outputs.released }}
+
+permissions: {}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.validate.outputs.version }}
+      tag: ${{ steps.validate.outputs.tag }}
+    steps:
+      - name: Checkout downstream repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Checkout upstream shared repository
+        uses: actions/checkout@v7
+        with:
+          repository: HighBridgeDragon/jp-skills-shared
+          ref: ${{ inputs.shared-ref }}
+          path: .shared
+          persist-credentials: false
+
+      - name: Validate skill against Agent Skills spec
+        id: validate
+        env:
+          SKILL_DIR: ${{ inputs.skill-dir }}
+        run: |
+          # inputs 検証（ディレクトリトラバーサル・インジェクション防止）
+          if [[ ! "$SKILL_DIR" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+            echo "ERROR: skill-dir ($SKILL_DIR) は英小文字・数字・ハイフンのみ許可されます" >&2
+            exit 1
+          fi
+
+          # Agent Skills 仕様適合検証
+          bash .shared/scripts/validate-skill.sh "$SKILL_DIR"
+
+          # バージョン抽出とタグ名生成
+          VERSION=$(bash .shared/scripts/skill-version.sh "$SKILL_DIR")
+          TAG="v${VERSION}"
+
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+  release:
+    needs: validate
+    if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: skill-release
+      cancel-in-progress: false
+    outputs:
+      released: ${{ steps.release.outputs.released }}
+    steps:
+      - name: Checkout downstream repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Checkout upstream shared repository
+        uses: actions/checkout@v7
+        with:
+          repository: HighBridgeDragon/jp-skills-shared
+          ref: ${{ inputs.shared-ref }}
+          path: .shared
+          persist-credentials: false
+
+      - name: Release when SKILL.md declares a new version
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SKILL_DIR: ${{ inputs.skill-dir }}
+          TAG: ${{ needs.validate.outputs.tag }}
+        run: |
+          TAG="${TAG:-v$(bash .shared/scripts/skill-version.sh "$SKILL_DIR")}"
+
+          # 既存リリースチェック（同一バージョンのままの push では何もしない）
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "$TAG は公開済みのため何もしない"
+            echo "released=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # リリースノートの準備（下流の個別定義があれば優先、なければ共通テンプレートを展開）
+          if [ -f .github/release-notes.md ]; then
+            cp .github/release-notes.md .shared/templates/release-notes.md.tmpl
+          else
+            sed -i \
+              -e "s|{{REPO}}|${GITHUB_REPOSITORY}|g" \
+              -e "s|{{SKILL_DIR}}|${SKILL_DIR}|g" \
+              .shared/templates/release-notes.md.tmpl
+          fi
+
+          # MIT は複製物に許諾表示を含めることを求めるため、zip 内にも LICENSE を同梱する
+          if [ -f LICENSE ]; then
+            cp LICENSE "$SKILL_DIR/LICENSE"
+          fi
+
+          # 展開時のトップが $SKILL_DIR/ になるよう、ディレクトリごと固める
+          zip -r "$SKILL_DIR.zip" "$SKILL_DIR/"
+          unzip -l "$SKILL_DIR.zip"
+
+          # gh release create はタグが無ければ --target の commit に作るため、事前の tag push は不要
+          gh release create "$TAG" "$SKILL_DIR.zip" \
+            --target "$GITHUB_SHA" \
+            --title "$TAG" \
+            --notes-file .shared/templates/release-notes.md.tmpl
+
+          echo "released=true" >> "$GITHUB_OUTPUT"
