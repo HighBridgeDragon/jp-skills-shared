@@ -1,0 +1,5 @@
+# シェルスクリプトは LF を強制する
+*.sh text eol=lf
+
+# CRLF 検出テスト用 fixture は CRLF を保持する
+tests/fixtures/crlf-script/scripts/fail.sh text eol=crlf
