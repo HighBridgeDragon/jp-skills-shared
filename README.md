@@ -15,7 +15,7 @@
 1. **パイプラインの共通化と軽量化**: 各下流リポジトリのワークフローを薄い呼び出し定義に集約し、重複した保守コストを削減します。
 2. **サプライチェーン保護の一元適用**: Takumi Guard by GMO や Dependabot の週次更新を標準化し、npm・Action 依存の安全性を確保します。
 3. **Agent Skills 仕様の厳格な検証**: `SKILL.md` の Frontmatter、バージョン命名規則、LF 改行コード等の品質基準を自動検証します。
-4. **設定原本と共通ドキュメントの同期**: `.gitattributes`, `.markdownlint.json`, `dependabot.yml`, `docs/install.md` を一貫して下流へ配信します。
+4. **設定原本の同期と共通導入ガイド**: `.gitattributes`, `.markdownlint.json`, `dependabot.yml` を下流へ配信し、汎用クライアント導入ガイド（`docs/install-guide.md`）を一元提供します。
 
 ---
 
@@ -35,6 +35,8 @@ jp-skills-shared/
 ├── actions/
 │   └── setup-takumi-guard/            # サプライチェーン保護用 Composite Action
 │       └── action.yml
+├── docs/
+│   └── install-guide.md               # 各 AI クライアント対応共通導入ガイド（SSOT）
 ├── scripts/
 │   ├── validate-skill.sh              # Agent Skills 仕様適合性検証スクリプト
 │   └── skill-version.sh               # SKILL.md からの semver バージョン抽出スクリプト
@@ -42,8 +44,7 @@ jp-skills-shared/
 │   ├── files/                         # 下流リポジトリへの同期原本ファイル群
 │   │   ├── .gitattributes             # LF 改行保護 & zip 除外設定
 │   │   ├── .markdownlint.json         # 共通 MarkdownLint ルール
-│   │   ├── .github/dependabot.yml     # Actions 週次更新設定
-│   │   └── docs/install.md.tmpl       # 各 AI クライアント対応導入ガイド原本テンプレート
+│   │   └── .github/dependabot.yml     # Actions 週次更新設定
 │   └── sync.sh                        # 下流リポジトリ一括同期スクリプト (gh CLI 利用)
 ├── templates/
 │   └── release-notes.md.tmpl          # Reusable Release で使用する共通リリースノート原本
@@ -240,7 +241,8 @@ Claude Code ワークフロー内で npm パッケージを実行・インスト
 - `.gitattributes`: シェルスクリプトの LF 改行保護、および GitHub Download ZIP / Source code (zip) からの `SKILL.md` 除外（誤解釈・誤アップロード防止）。
 - `.markdownlint.json`: プロジェクト共通の MarkdownLint 設定。
 - `.github/dependabot.yml`: GitHub Actions の週次定期更新（月曜実行、コミットプレフィックス `ci`）。
-- `docs/install.md.tmpl`: 各種 AI クライアント（Claude Code, claude.ai, OpenAI Codex, Goose, Gemini 等）への導入手順原本テンプレート。`${SKILL}` および `${REPO}` プレースホルダーを含みます。
+
+※ 各種 AI クライアントへの導入手順は、本リポジトリの [`docs/install-guide.md`](docs/install-guide.md) を単一情報源（SSOT）として集約しています。下流リポジトリの `docs/install.md` は共通ガイドへのリンクとスキル固有の制約・ドメインのみを保持します。
 
 ### 6.2 同期スクリプト (`sync/sync.sh`) の使用方法
 
