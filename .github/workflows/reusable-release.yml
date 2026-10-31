@@ -119,10 +119,7 @@ jobs:
               .shared/templates/release-notes.md.tmpl
             # private では npx skills add は認証済みアカウントでのみ成立するため、注記を添える
             if [ "$(gh repo view --json isPrivate -q .isPrivate)" = "true" ]; then
-              sed -i '/^npx skills add/{n;a\
-\
-> **注意**: 本リポジトリは private です。アクセス権のあるアカウントで `gh auth login` または Git 認証（SSH 含む）を済ませた環境でのみ実行できます。
-}' .shared/templates/release-notes.md.tmpl
+              sed -i '/^npx skills add/{n; s|$|\n\n> **注意**: 本リポジトリは private です。アクセス権のあるアカウントで `gh auth login` または Git 認証（SSH 含む）を済ませた環境でのみ実行できます。|}' .shared/templates/release-notes.md.tmpl
             fi
           fi
 
