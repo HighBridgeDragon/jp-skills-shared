@@ -15,7 +15,7 @@ workflows:
         - 'anthropics/claude-code-action@v1.0.266'
     '.github/workflows/reusable-markdown-lint.yml':
         - 'actions/checkout@v7.0.1'
-        - 'reviewdog/action-markdownlint@v0.32.0'
+        - 'reviewdog/action-markdownlint@v0.33.1'
     '.github/workflows/reusable-release.yml':
         - 'actions/checkout@v7.0.1'
     'actions/setup-takumi-guard/action.yml':
@@ -43,8 +43,8 @@ dependencies:
         commit: 'sha1-0c5077e51419868618aeaa5fe8019c62421857d6'
         owner_id: 108928776
         repo_id: 512644635
-    'reviewdog/action-markdownlint@v0.32.0':
-        ref: 'v0.32.0'
-        commit: 'sha1-f8e8c509d6e706db79bb39c1c506c968f1a66b82'
+    'reviewdog/action-markdownlint@v0.33.1':
+        ref: 'v0.33.1'
+        commit: 'sha1-584c3e89347d0b16ede47c73ae199550a02b1b37'
         owner_id: 48765237
         repo_id: 236138682
